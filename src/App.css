@@ -1,4 +1,4 @@
-.display-hidden{
+.display-hidden {
   display: none;
 }
 .page-nation {
@@ -6,6 +6,12 @@
   display: flex;
   justify-content: center;
   margin-top: 5px;
- 
+}
 
+.center {
+  text-align: center;
+  justify-content: center;
+}
+.search-bar {
+  width: 100%;
 }
