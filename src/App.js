@@ -68,23 +68,28 @@ function App() {
 
   const renderPages = (pages) => {
     let pageSpan = [];
+    pageSpan.push(
+      <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+        {"<<"}
+      </button>
+    );
     for (let i = 1; i <= pages; i++) {
       pageSpan.push(<button onClick={() => setPage(i)}> {i}</button>);
     }
+    pageSpan.push(
+      <button disabled={page === totalPages} onClick={() => setPage(page + 1)}>
+        {">>"}
+      </button>
+    );
     return pageSpan;
   };
 
-  const searchHandler = (searchData) => {
-    console.log(searchData, "yo");
-    const nameSearchData = data.filter(
-      (val) => val.name.includes(searchData) && val
+  const searchHandler = (searchData, data) => {
+    const nameSearchData = data.filter((val) => val.name.includes(searchData));
+    const emailSearchData = data.filter((val) =>
+      val.email.includes(searchData)
     );
-    const emailSearchData = data.filter(
-      (val) => val.email.includes(searchData) && val
-    );
-    const roleSearchData = data.filter(
-      (val) => val.role.includes(searchData) && val
-    );
+    const roleSearchData = data.filter((val) => val.role.includes(searchData));
     const searchResult = [
       ...nameSearchData,
       ...emailSearchData,
@@ -122,8 +127,7 @@ function App() {
         value={searchValue}
         onChange={(e) => {
           setSearchValue(e.target.value);
-
-          delaySearch(e.target.value);
+          delaySearch(e.target.value, data);
           if (!e.target.value) setSearchData([]);
         }}
         placeholder="Search with Name/Email/Role"
