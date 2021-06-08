@@ -1,5 +1,5 @@
 import Table from "./components/table";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import React from "react";
 import "./App.css";
 
@@ -75,21 +75,45 @@ function App() {
   };
 
   const searchHandler = (searchData) => {
-    if (searchData) {
-      const nameSearchData = data.filter(
-        (val) => val.name.includes(searchData) && val
-      );
-      const emailSearchData = data.filter(
-        (val) => val.email.includes(searchData) && val
-      );
-      const roleSearchData = data.filter(
-        (val) => val.role.includes(searchData) && val
-      );
-
-      setSearchData([...nameSearchData, ...emailSearchData, ...roleSearchData]);
-    } else setSearchData([]);
+    console.log(searchData, "yo");
+    const nameSearchData = data.filter(
+      (val) => val.name.includes(searchData) && val
+    );
+    const emailSearchData = data.filter(
+      (val) => val.email.includes(searchData) && val
+    );
+    const roleSearchData = data.filter(
+      (val) => val.role.includes(searchData) && val
+    );
+    const searchResult = [
+      ...nameSearchData,
+      ...emailSearchData,
+      ...roleSearchData,
+    ];
+    // remove duplicate data
+    setSearchData(
+      searchResult.reduce((acc, val) => {
+        if (!acc.find((v) => v.id === val.id)) {
+          acc.push(val);
+        }
+        return acc;
+      }, [])
+    );
   };
 
+  function debounce(func, delay) {
+    let timeout;
+    return function (...args) {
+      const context = this;
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        timeout = null;
+        func.apply(context, args);
+      }, delay);
+    };
+  }
+
+  const delaySearch = useCallback(debounce(searchHandler, 300), []);
   return (
     <>
       <input
@@ -98,16 +122,16 @@ function App() {
         value={searchValue}
         onChange={(e) => {
           setSearchValue(e.target.value);
+
+          delaySearch(e.target.value);
+          if (!e.target.value) setSearchData([]);
         }}
         placeholder="Search with Name/Email/Role"
-        onBlur={() => {
-          searchHandler(searchValue);
-        }}
       />
       {!isFetching ? (
         <Table
           tableHeaders={tableHeaders}
-          data={searchData.length ? searchData : activeData}
+          data={searchValue ? searchData : activeData}
           onChangeHandler={onChangeHandler}
           onDeleteHandler={onDeleteHandler}
           deleteRows={deleteRows}
@@ -116,12 +140,13 @@ function App() {
       ) : (
         <span>Loading...</span>
       )}
+      {searchValue && searchData.length === 0 && <span>No Results Found</span>}
       <div className={deleteRows.length === 0 ? "display-hidden" : null}>
         <button onClick={() => onDeleteHandler(deleteRows)}>
           Delete Selected
         </button>
       </div>
-      <div className={searchData.length ? "display-hidden" : "center"}>
+      <div className={searchValue ? "display-hidden" : "center"}>
         {renderPages(totalPages)}
         {`Page: ` + page + `of` + totalPages}
       </div>
