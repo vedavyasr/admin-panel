@@ -25,10 +25,14 @@ function Table({
       <tbody>
         {data.map((row) => {
           return (
-            <tr key={row.id}>
+            <tr
+              key={row.id}
+              className={deleteRows.includes(row.id) ? "selected" : ""}
+            >
               <td>
                 <input
                   type="checkbox"
+                  className={activeRow === row.id ? "bordered-input" : ""}
                   onClick={() => {
                     if (deleteRows.includes(row.id)) {
                       setDeleteRow((state) =>
@@ -42,6 +46,7 @@ function Table({
                 <input
                   type="text"
                   value={row.name}
+                  className={activeRow === row.id ? "bordered-input" : ""}
                   name="name"
                   disabled={row.id !== activeRow}
                   onChange={(e) =>
@@ -53,6 +58,7 @@ function Table({
                 <input
                   type="text"
                   value={row.email}
+                  className={activeRow === row.id ? "bordered-input" : ""}
                   name="email"
                   disabled={row.id !== activeRow}
                   onChange={(e) =>
@@ -64,6 +70,7 @@ function Table({
                 <input
                   type="text"
                   value={row.role}
+                  className={activeRow === row.id ? "bordered-input" : ""}
                   name="role"
                   disabled={row.id !== activeRow}
                   onChange={(e) =>

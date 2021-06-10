@@ -35,16 +35,18 @@ function App() {
   }, [limit]);
 
   useEffect(() => {
-    setTotalPages(Math.ceil(data.length / limit));
-  }, [data, limit]);
+    let contextData = searchValue.length ? searchData : data;
+    setTotalPages(Math.ceil(contextData.length / limit));
+  }, [data, limit, searchData, searchValue.length]);
 
   useEffect(() => {
+    let contextData = searchValue.length ? searchData : data;
     if (page > 1) {
-      setActiveData(data.slice((page - 1) * limit, page * limit));
+      setActiveData(contextData.slice((page - 1) * limit, page * limit));
     } else {
-      setActiveData(data.slice(page - 1, limit));
+      setActiveData(contextData.slice(page - 1, limit));
     }
-  }, [activeData.length, data, limit, page]);
+  }, [activeData.length, data, limit, page, searchData, searchValue]);
 
   const onChangeHandler = (row, key, value) => {
     setActiveData((state) =>
@@ -85,6 +87,7 @@ function App() {
   };
 
   const searchHandler = (searchData, data) => {
+
     const nameSearchData = data.filter((val) => val.name.includes(searchData));
     const emailSearchData = data.filter((val) =>
       val.email.includes(searchData)
@@ -135,7 +138,7 @@ function App() {
       {!isFetching ? (
         <Table
           tableHeaders={tableHeaders}
-          data={searchValue ? searchData : activeData}
+          data={activeData}
           onChangeHandler={onChangeHandler}
           onDeleteHandler={onDeleteHandler}
           deleteRows={deleteRows}
@@ -150,7 +153,7 @@ function App() {
           Delete Selected
         </button>
       </div>
-      <div className={searchValue ? "display-hidden" : "center"}>
+      <div>
         {renderPages(totalPages)}
         {`Page: ` + page + `of` + totalPages}
       </div>
