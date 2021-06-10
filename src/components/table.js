@@ -8,12 +8,29 @@ function Table({
   onDeleteHandler,
   deleteRows,
   setDeleteRow,
+  allCheck,
+  setAllChecked
 }) {
   const [activeRow, setActiveRow] = useState(null);
+  
   return (
     <table className="table">
       <thead>
         <tr>
+          <th scope="col">
+            <input
+              type="checkbox"
+              checked={allCheck}
+              onChange={(e) => {
+                setAllChecked(!allCheck);
+                if (!e.target.checked) {
+                  setDeleteRow([]);
+                } else {
+                  setDeleteRow(data.map((v) => v.id));
+                }
+              }}
+            />
+          </th>
           {tableHeaders.map((header) => (
             <th scope="col" key={header}>
               {header}
@@ -33,7 +50,8 @@ function Table({
                 <input
                   type="checkbox"
                   className={activeRow === row.id ? "bordered-input" : ""}
-                  onClick={() => {
+                  checked={deleteRows.includes(row.id)}
+                  onChange={() => {
                     if (deleteRows.includes(row.id)) {
                       setDeleteRow((state) =>
                         state.filter((val) => val !== row.id)

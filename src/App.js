@@ -8,9 +8,9 @@ function App() {
   const [activeData, setActiveData] = useState([]);
   const [searchData, setSearchData] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
-  const tableHeaders = ["", "Name", "Email", "Role", "Actions"];
+  const tableHeaders = ["Name", "Email", "Role", "Actions"];
   const [deleteRows, setDeleteRow] = useState([]);
-
+  const [allCheck, setAllChecked] = useState(false);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
@@ -64,6 +64,7 @@ function App() {
   };
 
   const onDeleteHandler = (rowIds) => {
+    setAllChecked(false);
     setData((state) => state.filter((val) => !rowIds.includes(val.id)));
     setActiveData((state) => state.filter((val) => !rowIds.includes(val.id)));
   };
@@ -87,7 +88,6 @@ function App() {
   };
 
   const searchHandler = (searchData, data) => {
-
     const nameSearchData = data.filter((val) => val.name.includes(searchData));
     const emailSearchData = data.filter((val) =>
       val.email.includes(searchData)
@@ -143,6 +143,8 @@ function App() {
           onDeleteHandler={onDeleteHandler}
           deleteRows={deleteRows}
           setDeleteRow={setDeleteRow}
+          setAllChecked={setAllChecked}
+          allCheck={allCheck}
         />
       ) : (
         <span>Loading...</span>
