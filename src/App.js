@@ -123,7 +123,7 @@ function App() {
 
   const delaySearch = useCallback(debounce(searchHandler, 300), []);
   return (
-    <>
+    <div className='container'>
       <input
         type="search"
         className="search-bar"
@@ -159,7 +159,7 @@ function App() {
         {renderPages(totalPages)}
         {`Page: ` + page + `of` + totalPages}
       </div>
-    </>
+    </div>
   );
 }
 

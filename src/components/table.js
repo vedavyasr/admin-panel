@@ -18,6 +18,7 @@ function Table({
       <thead>
         <tr>
           <th scope="col">
+          <span className='select-all'>Select All</span>
             <input
               type="checkbox"
               checked={allCheck}
@@ -46,7 +47,7 @@ function Table({
               key={row.id}
               className={deleteRows.includes(row.id) ? "selected" : ""}
             >
-              <td>
+              <td data-th='select' className='select'>
                 <input
                   type="checkbox"
                   className={activeRow === row.id ? "bordered-input" : ""}
@@ -60,7 +61,7 @@ function Table({
                   }}
                 />
               </td>
-              <td>
+              <td data-th='Name'>
                 <input
                   type="text"
                   value={row.name}
@@ -72,7 +73,7 @@ function Table({
                   }
                 ></input>
               </td>
-              <td>
+              <td data-th='Email'>
                 <input
                   type="text"
                   value={row.email}
@@ -84,7 +85,7 @@ function Table({
                   }
                 ></input>
               </td>
-              <td>
+              <td data-th='role'>
                 <input
                   type="text"
                   value={row.role}
@@ -96,7 +97,7 @@ function Table({
                   }
                 ></input>
               </td>
-              <td>
+              <td data-th='Actions'>
                 <span>
                   <button
                     onClick={() => {

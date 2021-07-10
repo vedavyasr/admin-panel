@@ -14,4 +14,17 @@
 }
 .search-bar {
   width: 100%;
+  border:  1px solid black !important;
+  height: 40px;
+}
+
+
+@media screen and (max-width: 885px) {
+  .search-bar {
+    height: 40px;
+    white-space: pre-wrap;
+  }
+}
+.container {
+  margin: 40px;
 }
